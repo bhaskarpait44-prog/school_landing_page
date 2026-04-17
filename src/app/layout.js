@@ -23,11 +23,7 @@ const display = Fraunces({
 
 export const metadata = buildMetadata();
 
-const structuredData = [
-  websiteSchema(),
-  organizationSchema(),
-  schoolSchema(),
-];
+const structuredData = [websiteSchema(), organizationSchema(), schoolSchema()];
 
 export default function RootLayout({ children }) {
   return (
@@ -38,7 +34,12 @@ export default function RootLayout({ children }) {
       <body className="min-h-full bg-[var(--color-surface)] text-[var(--color-ink)]">
         <div className="site-shell">
           <Navbar />
-          <main className="flex-1">{children}</main>
+          {/*
+            FIX: The Navbar is `position: fixed`, so without top padding the
+            first section slides underneath it. 56px covers the navbar height
+            on mobile (py-3 + content ≈ 56px); 64px on sm+ screens.
+          */}
+          <main className="flex-1 pt-[56px] sm:pt-[64px]">{children}</main>
           <Footer />
         </div>
         <NotificationModal />
