@@ -28,10 +28,8 @@
 
 html {
   overflow-x: hidden;
-  background:
-    radial-gradient(circle at top left, rgba(15, 118, 110, 0.18), transparent 30%),
-    radial-gradient(circle at top right, rgba(240, 180, 41, 0.18), transparent 25%),
-    linear-gradient(180deg, #fffdf8 0%, #f4efe4 100%);
+  background: var(--color-surface);
+  scroll-behavior: smooth;
 }
 
 body {
@@ -42,6 +40,22 @@ body {
   overflow-x: hidden;
   color: var(--color-ink);
   font-family: var(--font-sans), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Performance optimizations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Smooth scroll container */
+.smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 a {
@@ -52,6 +66,12 @@ a {
 img, video, svg {
   max-width: 100%;
   height: auto;
+  display: block;
+}
+
+/* Prevent layout shift on images */
+img {
+  content-visibility: auto;
 }
 
 .site-shell {
@@ -72,12 +92,15 @@ img, video, svg {
   padding-block: clamp(3.5rem, 7vw, 6rem);
 }
 
+/* Optimized glass panel - reduced blur for performance */
 .glass-panel {
   background: var(--color-panel);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.7);
   box-shadow: var(--shadow-soft);
+  /* GPU acceleration */
+  transform: translateZ(0);
 }
 
 .eyebrow {
@@ -99,6 +122,7 @@ img, video, svg {
   letter-spacing: -0.03em;
 }
 
+/* Optimized grid overlay */
 .grid-overlay {
   position: absolute;
   inset: 0;
@@ -108,16 +132,63 @@ img, video, svg {
   background-size: 56px 56px;
   mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.65), transparent 90%);
   pointer-events: none;
+  /* GPU acceleration */
+  transform: translateZ(0);
 }
 
+/* Simplified floating orb for better performance */
 .floating-orb {
   position: absolute;
   border-radius: 999px;
-  filter: blur(6px);
+  filter: blur(4px);
   opacity: 0.6;
   pointer-events: none;
+  /* GPU acceleration */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .text-balance {
   text-wrap: balance;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .floating-orb {
+    animation: none !important;
+  }
+}
+
+/* Hardware acceleration for animated elements */
+.animate-element {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+/* GPU acceleration layer for slider */
+.gpu-layer {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Contain layout for complex sections */
+.layout-contain {
+  contain: layout style paint;
+}
+
+/* Optimize paint performance */
+.optimize-paint {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
 }

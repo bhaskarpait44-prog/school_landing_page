@@ -123,7 +123,7 @@ export default function AdmissionProcedurePage() {
               <Card className="bg-[var(--color-panel-strong)] text-white">
                 <h3 className="text-2xl font-semibold">Ready to Begin?</h3>
                 <p className="mt-3 leading-7 text-white/80">
-                  Start your child's journey with ABC School. Our admissions team is here to guide you through every step.
+                  Start your child&apos;s journey with ABC School. Our admissions team is here to guide you through every step.
                 </p>
                 <div className="mt-6 flex flex-col gap-3">
                   <Button href="/admission/online" className="bg-white text-[var(--color-ink)]">

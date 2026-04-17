@@ -16,12 +16,13 @@ export default function GalleryPreview() {
 
         <div className="mt-12 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {galleryMoments.map((item, index) => (
-            <Reveal key={item.title} delay={index * 0.07}>
+            <Reveal key={item.title} delay={index * 0.05}>
               <article
-                className={`group relative min-h-[260px] overflow-hidden rounded-[26px] bg-gradient-to-br ${item.palette} p-6 text-white shadow-[var(--shadow-card)] md:min-h-[280px] md:rounded-[30px]`}
+                className={`group relative min-h-[260px] overflow-hidden rounded-[26px] bg-gradient-to-br ${item.palette} p-6 text-white shadow-[var(--shadow-card)] md:min-h-[280px] md:rounded-[30px] transition-transform duration-300 hover:scale-[1.02]`}
+                style={{ willChange: "transform" }}
               >
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_0%,rgba(0,0,0,0.35)_100%)]" />
-                <div className="absolute right-5 top-5 h-14 w-14 rounded-full border border-white/30 bg-white/10 transition duration-500 group-hover:scale-110" />
+                <div className="absolute right-5 top-5 h-14 w-14 rounded-full border border-white/30 bg-white/10 transition-transform duration-300 group-hover:scale-110" />
                 <div className="relative flex h-full flex-col justify-end">
                   <p className="text-xs uppercase tracking-[0.24em] text-white/75">Featured</p>
                   <h3 className="mt-2 text-2xl font-semibold leading-tight text-balance md:text-3xl">

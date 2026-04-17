@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -r \"\\\\`'\" src/ --include=\"*.js\" --include=\"*.jsx\")",
+      "Bash(taskkill /F /IM node.exe)",
+      "Bash(npm run *)",
+      "Bash(xxd src/app/admission/page.js)"
+    ]
+  }
+}
