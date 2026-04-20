@@ -192,3 +192,21 @@ img {
   content-visibility: auto;
   contain-intrinsic-size: 0 500px;
 }
+
+/* Marquee animation for Notice Board */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.33%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}

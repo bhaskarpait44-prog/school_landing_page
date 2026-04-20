@@ -18,7 +18,6 @@ export default function Home() {
     <>
       <Hero />
       <AboutPreview />
-      <NoticeBoard />
       <GalleryPreview />
       <ContactCTA />
     </>

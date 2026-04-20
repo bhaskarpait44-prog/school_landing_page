@@ -1,18 +1,18 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import Button from "@/components/ui/Button";
+import { notices } from "@/data/notices";
 
-// School images/slides data - Replace with actual images later
 const slides = [
   {
     id: 1,
     image: "/images/slide-1.jpg",
     gradient: "linear-gradient(135deg, #1e3a5f 0%, #2d5a87 50%, #3d7ab5 100%)",
-    title: "Welcome to ABC School",
+    title: "Welcome to Baptist School",
     subtitle: "Excellence in Education Since 1995",
-    description: "Nurturing young minds to become future leaders through quality education and holistic development.",
+    description: "Nurturing young minds to become future leaders through quality education.",
   },
   {
     id: 2,
@@ -20,7 +20,7 @@ const slides = [
     gradient: "linear-gradient(135deg, #0f4c3a 0%, #1a6b4f 50%, #27a069 100%)",
     title: "Modern Learning Facilities",
     subtitle: "State-of-the-Art Infrastructure",
-    description: "Smart classrooms, science labs, and digital libraries designed for 21st century learning.",
+    description: "Smart classrooms, science labs, and digital libraries.",
   },
   {
     id: 3,
@@ -28,22 +28,8 @@ const slides = [
     gradient: "linear-gradient(135deg, #5c3d2e 0%, #8b5a3c 50%, #b8784e 100%)",
     title: "All-Round Development",
     subtitle: "Sports, Arts & Culture",
-    description: "Encouraging students to excel beyond academics through diverse extracurricular activities.",
+    description: "Encouraging students to excel beyond academics.",
   },
-  {
-    id: 4,
-    image: "/images/slide-4.jpg",
-    gradient: "linear-gradient(135deg, #3d2c5e 0%, #5a3d8c 50%, #7a52b3 100%)",
-    title: "Dedicated Faculty",
-    subtitle: "Experienced & Passionate Teachers",
-    description: "Our expert educators are committed to bringing out the best in every student.",
-  },
-];
-
-const stats = [
-  { value: "98%", label: "Board success rate" },
-  { value: "28+", label: "Clubs and studios" },
-  { value: "1:16", label: "Teacher-student ratio" },
 ];
 
 export default function Hero() {
@@ -58,210 +44,165 @@ export default function Hero() {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   }, []);
 
-  const goToSlide = useCallback((index) => {
-    setCurrentSlide(index);
-  }, []);
-
-  // Auto-play with RAF-based timing for smoother performance
   useEffect(() => {
     if (isPaused) return;
-
-    let startTime = Date.now();
-    let rafId;
-
-    const checkTime = () => {
-      const now = Date.now();
-      if (now - startTime >= 5000) {
-        nextSlide();
-        startTime = now;
-      }
-      rafId = requestAnimationFrame(checkTime);
-    };
-
-    rafId = requestAnimationFrame(checkTime);
-    return () => cancelAnimationFrame(rafId);
+    const interval = setInterval(nextSlide, 5000);
+    return () => clearInterval(interval);
   }, [isPaused, nextSlide]);
 
   const slide = slides[currentSlide];
 
   return (
     <section className="relative w-full">
-      {/* Main Slider - GPU Accelerated */}
-      <div
-        className="relative h-[500px] sm:h-[600px] md:h-[700px] lg:h-[800px] w-full overflow-hidden gpu-layer"
-      >
-        {/* Background Images - Simplified Animation */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={slide.id}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="absolute inset-0 gpu-layer"
-          >
-            {/* Fallback gradient background */}
+      <div className="max-w-[1600px] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] xl:grid-cols-[1fr_420px] gap-4 lg:gap-6">
+          {/* Left Side - Image Slider with left spacing */}
+          <div className="lg:pl-6 xl:pl-8 lg:py-6">
             <div
-              className="absolute inset-0"
-              style={{ background: slide.gradient }}
-            />
-            {/* Overlay for better text readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/20" />
-          </motion.div>
-        </AnimatePresence>
-
-        {/* Content - Staggered fade in */}
-        <div className="relative z-10 h-full flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto text-center">
+              className="relative overflow-hidden h-[400px] sm:h-[480px] lg:h-[500px] rounded-2xl shadow-2xl shadow-slate-900/20"
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+            >
+            {/* Background Slides */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={slide.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6 }}
+                className="absolute inset-0"
               >
-                <p className="text-white/80 text-sm sm:text-base uppercase tracking-[0.3em] mb-3 sm:mb-4">
-                  {slide.subtitle}
-                </p>
-                <h1 className="display-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 sm:mb-6">
-                  {slide.title}
-                </h1>
-                <p className="text-white/90 text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed">
-                  {slide.description}
-                </p>
-                <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
-                  <Button
-                    href="/admission"
-                    className="bg-white text-[var(--color-ink)] hover:bg-white/90 px-6 sm:px-8 py-3 text-sm sm:text-base"
-                  >
-                    Apply for Admission
-                  </Button>
-                  <Button
-                    href="/about"
-                    variant="secondary"
-                    className="border-2 border-white/50 bg-transparent text-white hover:bg-white/10 px-6 sm:px-8 py-3 text-sm sm:text-base"
-                  >
-                    Learn More
-                  </Button>
-                </div>
+                <div
+                  className="absolute inset-0"
+                  style={{ background: slide.gradient }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/40" />
               </motion.div>
             </AnimatePresence>
+
+            {/* Content */}
+            <div className="relative z-10 h-full flex flex-col justify-center px-6 sm:px-10 lg:px-16">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={slide.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.5 }}
+                  className="max-w-xl"
+                >
+                  <p className="text-white/80 text-xs sm:text-sm uppercase tracking-wider mb-3">
+                    {slide.subtitle}
+                  </p>
+                  <h1 className="display-title text-2xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight mb-4">
+                    {slide.title}
+                  </h1>
+                  <p className="text-white/80 text-sm sm:text-base mb-6 max-w-md">
+                    {slide.description}
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    <Link
+                      href="/admission"
+                      className="inline-flex items-center px-6 py-2.5 bg-white text-slate-900 rounded-full text-sm font-medium hover:bg-white/90 transition-colors"
+                    >
+                      Apply Now
+                    </Link>
+                    <Link
+                      href="/about"
+                      className="inline-flex items-center px-6 py-2.5 border border-white/40 text-white rounded-full text-sm font-medium hover:bg-white/10 transition-colors"
+                    >
+                      Learn More
+                    </Link>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Navigation Arrows */}
+              <button
+                onClick={prevSlide}
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 backdrop-blur text-white flex items-center justify-center hover:bg-white/30 transition-colors"
+                aria-label="Previous slide"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <button
+                onClick={nextSlide}
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 backdrop-blur text-white flex items-center justify-center hover:bg-white/30 transition-colors"
+                aria-label="Next slide"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+
+              {/* Slide Dots */}
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+                {slides.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentSlide(index)}
+                    className={`w-2.5 h-2.5 rounded-full transition-colors ${
+                      index === currentSlide ? "bg-white" : "bg-white/40"
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
+          </div>
 
-        {/* Navigation Arrows - Simplified */}
-        <button
-          onClick={() => {
-            prevSlide();
-            setIsPaused(true);
-            setTimeout(() => setIsPaused(false), 8000);
-          }}
-          className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 p-2 sm:p-3 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors duration-200"
-          aria-label="Previous slide"
-        >
-          <svg
-            className="w-5 h-5 sm:w-6 sm:h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        <button
-          onClick={() => {
-            nextSlide();
-            setIsPaused(true);
-            setTimeout(() => setIsPaused(false), 8000);
-          }}
-          className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 p-2 sm:p-3 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors duration-200"
-          aria-label="Next slide"
-        >
-          <svg
-            className="w-5 h-5 sm:w-6 sm:h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-
-        {/* Dots Navigation - No animation on dots */}
-        <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 sm:gap-3">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => {
-                goToSlide(index);
-                setIsPaused(true);
-                setTimeout(() => setIsPaused(false), 8000);
-              }}
-              className={`h-2 sm:h-3 rounded-full transition-all duration-200 ${
-                index === currentSlide
-                  ? "w-6 sm:w-8 bg-white"
-                  : "w-2 sm:w-3 bg-white/50 hover:bg-white/70"
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
-        </div>
-
-        {/* Slide Counter */}
-        <div className="absolute bottom-6 sm:bottom-8 right-4 sm:right-6 z-20 text-white/70 text-xs sm:text-sm font-medium">
-          <span className="text-white font-semibold">{String(currentSlide + 1).padStart(2, "0")}</span>
-          <span className="mx-1">/</span>
-          <span>{String(slides.length).padStart(2, "0")}</span>
-        </div>
-      </div>
-
-      {/* Stats Section */}
-      <div className="relative z-10 -mt-16 sm:-mt-20 mx-4 sm:mx-6 lg:mx-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="max-w-5xl mx-auto grid grid-cols-3 gap-3 sm:gap-4 md:gap-6 p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl bg-white shadow-xl border border-gray-100"
-        >
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="text-center"
-            >
-              <p className="display-title text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--color-accent)]">
-                {stat.value}
-              </p>
-              <p className="mt-1 sm:mt-2 text-[10px] sm:text-xs md:text-sm text-[var(--color-muted)] uppercase tracking-wider">
-                {stat.label}
-              </p>
-            </div>
-          ))}
-        </motion.div>
-      </div>
-
-      {/* Quick Info Bar - Simplified animations */}
-      <div className="mt-8 sm:mt-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          {[
-            { icon: "📚", title: "Academic Programs", desc: "CBSE Curriculum" },
-            { icon: "🏆", title: "Achievements", desc: "National Level Awards" },
-            { icon: "🚌", title: "Transport", desc: "Safe & Secure Bus Service" },
-            { icon: "🏫", title: "Campus", desc: "5 Acres of Learning Space" },
-          ].map((item) => (
-            <div
-              key={item.title}
-              className="flex items-center gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
-            >
-              <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-[var(--color-accent-soft)] flex items-center justify-center text-xl sm:text-2xl">
-                {item.icon}
+          {/* Right Side - Notice Board */}
+          <div className="lg:pr-6 xl:pr-8 lg:py-6">
+            <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 flex flex-col h-[400px] sm:h-[480px] lg:h-[500px] shadow-lg shadow-slate-900/5">
+            {/* Header */}
+            <div className="mb-5">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                <span className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
+                  Live Updates
+                </span>
               </div>
-              <div>
-                <p className="font-semibold text-[var(--color-ink)] text-sm sm:text-base">{item.title}</p>
-                <p className="text-xs sm:text-sm text-[var(--color-muted)]">{item.desc}</p>
-              </div>
+              <h2 className="text-xl font-bold text-slate-900">Notice Board</h2>
             </div>
-          ))}
+
+            {/* Notices */}
+            <div className="flex-1 space-y-3 overflow-y-auto">
+              {notices.map((notice, index) => (
+                <div
+                  key={notice.title}
+                  className="group p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-emerald-200 hover:bg-emerald-50/30 transition-all"
+                >
+                  <span className="inline-block px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-semibold uppercase tracking-wider mb-2">
+                    {notice.tag}
+                  </span>
+                  <h3 className="text-sm font-semibold text-slate-900 leading-tight group-hover:text-emerald-700 transition-colors line-clamp-2">
+                    {notice.title}
+                  </h3>
+                  <p className="text-xs text-slate-600 mt-1.5 line-clamp-2">
+                    {notice.detail}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* CTA */}
+            <div className="mt-5 pt-4 border-t border-slate-200">
+              <Link
+                href="/notices"
+                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-emerald-700 text-white text-sm font-medium hover:bg-emerald-800 transition-colors"
+              >
+                View All Notices
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

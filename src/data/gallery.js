@@ -10,12 +10,12 @@ export const galleryImages = [
   //   category: "Campus",
   //   caption: "Our beautiful campus entrance",
   // },
-  // {
-  //   src: "/images/gallery/classroom.jpg",
-  //   alt: "Modern Classroom",
-  //   category: "Facilities",
-  //   caption: "Smart classroom with digital boards",
-  // },
+  {
+    src: "/images/gallery/classroom.jpg",
+    alt: "Modern Classroom",
+    category: "Facilities",
+    caption: "Smart classroom with digital boards",
+  },
   // {
   //   src: "/images/gallery/sports-day.jpg",
   //   alt: "Sports Day",
